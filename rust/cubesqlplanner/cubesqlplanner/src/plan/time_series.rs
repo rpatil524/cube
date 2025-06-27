@@ -44,7 +44,6 @@ impl TimeSeries {
             && self.granularity.is_predefined_granularity()
         {
             let interval_description = templates
-                .base_tools()
                 .interval_and_minimal_time_unit(self.granularity.granularity_interval().clone())?;
             if interval_description.len() != 2 {
                 return Err(CubeError::internal(
@@ -52,6 +51,7 @@ impl TimeSeries {
                 ));
             }
             let interval = interval_description[0].clone();
+            let interval = templates.interval_string(interval)?;
             let minimal_time_unit = interval_description[1].clone();
             match &self.date_range {
                 TimeSeriesDateRange::Filter(from_date, to_date) => {
